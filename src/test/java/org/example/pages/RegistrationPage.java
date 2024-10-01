@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.example.base.BddLibrary;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,13 +29,14 @@ public class RegistrationPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    public RegistrationPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        PageFactory.initElements(driver,this);
+    public RegistrationPage() {
+        this.driver = BddLibrary.getDriver();
+        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(5));
+        PageFactory.initElements(this.driver,this);
     }
 
     public void clickNewUserBtn() throws InterruptedException {
+
         newUserRegisterBtn.click();
         Thread.sleep(2000);
     }

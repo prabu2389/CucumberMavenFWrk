@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.example.pageLocators.HomePageLocators;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,42 +10,45 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.example.base.BddLibrary;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 public class HomePage {
 
+    private static final Logger LOGGER = Logger.getLogger(HomePage.class.getName());
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @FindBy(xpath = "//*[@id=\"menuToggle\"]/input")
-    private WebElement hamburger_menu;
+    private HomePageLocators homePageLocators;
 
-    @FindBy(linkText = "Sign In Portal")
-    private static WebElement sign_In_LinkText;
-
-    @FindBy(linkText = "Online Products")
-    private WebElement online_prodPageLinkText;
 
     public HomePage() {
         this.driver = BddLibrary.getDriver();
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        PageFactory.initElements(driver,this);
+        homePageLocators = new HomePageLocators();
+        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+        PageFactory.initElements(this.driver,this.homePageLocators);
     }
 
-    public void click_hamburger_menu() throws InterruptedException {
-//        WebDriverManager.chromedriver().setup();
-//        BrowserDriver.driver = new ChromeDriver();
-        driver.get("https://anupdamoda.github.io/AceOnlineShoePortal/index.html");
-        hamburger_menu.click();
+    public void click_hamburger_menu(String url) throws InterruptedException {
 
-    }
-
-    public void click_signIn_link() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOf(sign_In_LinkText));
-        sign_In_LinkText.click();
+        try {
+            this.driver.get(url);
+//            wait.until(ExpectedConditions.visibilityOf(hamburger_menu));
+            homePageLocators.hamburger_menu.click();
+            /* hamburger_menu.click(); */
+            LOGGER.info("Clicked hamburger menu successfully");
+        } catch (Exception e) {
+            LOGGER.severe("Failed to click hamburger menu: " + e.getMessage());
+            throw e;
+        }
     }
 
     public void click_onlineProducts_link() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOf(online_prodPageLinkText));
-        online_prodPageLinkText.click();
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(homePageLocators.online_prodPageLinkText)).click();
+            LOGGER.info("Clicked online products link successfully");
+        } catch (Exception e) {
+            LOGGER.severe("Failed to click online products link: " + e.getMessage());
+            throw e;
+        }
     }
 }

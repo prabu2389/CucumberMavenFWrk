@@ -13,22 +13,21 @@ public class homePageStepDef {
 
     private HomePage homePage;
     private LoginPage loginPage;
-    private WebDriver driver;
+//    private WebDriver driver;
     private OnlineProductsPage onlinePage;
 
     public homePageStepDef() {
-        this.driver = BddLibrary.getDriver();
+//        this.driver = BddLibrary.getDriver();
         this.homePage = new HomePage();
         this.loginPage = new LoginPage();
         this.onlinePage = new OnlineProductsPage();
     }
 
     @Given("^user navigates to the login page")
-    public void user_navigates_to_the_login_page(){
+    public void user_navigates_to_the_login_page(String url){
 
         try {
-            homePage.click_hamburger_menu();
-            homePage.click_signIn_link();
+            homePage.click_hamburger_menu(url);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -37,6 +36,7 @@ public class homePageStepDef {
     @When("User successfully enters the login details")
     public void user_successfully_enters_the_login_details() throws InterruptedException {
         try {
+            loginPage.click_signIn_link();
             loginPage.enterUsername();
             loginPage.enterPassword();
             loginPage.clickLogin();
